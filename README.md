@@ -116,14 +116,14 @@ from cambio import add_param_to_class_instantiation
 old_code = "[Food(type='Cereal')\n, Fruit(type='Cheese')]"
 
 def get_expiration(instantiation):
-    food_type = instantiation.params.get('type', None)
-    if food_type === 'Cereal':
+    text = instantiation['text']
+    if 'Cereal' in text:
         return 10
-    elif food_type === 'Cheese':
+    elif 'Cheese' in text:
         return 1
 
 # age cars by one year
-add_param_to_class_instantiation(old_code, "Car", "expiration", get_expiration)
+add_param_to_class_instantiation(old_code, "Fruit", "expiration", get_expiration)
 ```
 
 # Testing
@@ -134,3 +134,4 @@ python3 -m unittest cambio.tests.test
 
 ## Support
 Contact the Library Author, Daniel J. Dufour, or post an issue at https://github.com/danieljdufour/cambio/issues
+

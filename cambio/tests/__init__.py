@@ -1,5 +1,7 @@
 #-*- coding: utf-8 -*-
 from unittest import main, TestCase
+from cambio import add_param_to_class_instantiation
+from cambio import find_all_named_parameters
 from cambio import remove_class_instantiation_parameter
 from cambio import remove_comments
 from cambio import remove_imports
@@ -46,6 +48,24 @@ class TestReplacingVariableDeclaration(TestCase):
         old_code = "HTTP_ORIGIN = 'http://localhost:8000'"
         new_code = replace_variable_declaration(old_code, 'HTTP_ORIGIN', 'http://localhost:4200')
         self.assertEqual(new_code, "HTTP_ORIGIN = 'http://localhost:4200'")
+
+class TestFindingsClassInstantiationParameters(TestCase):
+    def test_finding_class_instantiation_parameters(self):
+        old_code = 'new Fruit(age_in_days=5, type="Apple", country="USA")'
+        params = [match.group() for match in find_all_named_parameters(old_code)]
+        self.assertEqual(str(params), str(['age_in_days=5', ', type="Apple"', ', country="USA"']))
+
+class TestAddingParamToClassInstantiation(TestCase):
+    def test_adding_param_to_class_instantiation(self):
+        old_code = 'new Fruit(age_in_days=5, type="Apple", country="USA")'
+        new_code = add_param_to_class_instantiation(old_code, 'Fruit', 'quality', '100')
+        self.assertEqual(new_code, 'new Fruit(age_in_days=5, type="Apple", country="USA", quality="100")')
+
+    def test_adding_calculated_param_to_class_instantiation(self):
+        old_code = 'new Fruit(age_in_days=5, type="Apple", country="USA")'
+        new_code = add_param_to_class_instantiation(old_code, 'Fruit', 'expiration', lambda data: 10 if 'Apple' in data['line'] else 1)
+        self.assertEqual(new_code, 'new Fruit(age_in_days=5, type="Apple", country="USA", expiration=10)')
+
 
 class TestRemovingClassInstantiationParameter(TestCase):
     def test_removing_when_only_one_parameter(self):
