@@ -2,7 +2,7 @@
 from unittest import main, TestCase
 from cambio import add_param_to_class_instantiation
 from cambio import find_all_named_parameters
-from cambio import remove_class_declaration
+from cambio import remove_class_definition
 from cambio import remove_class_instantiation_parameter
 from cambio import remove_comments
 from cambio import remove_imports
@@ -29,7 +29,7 @@ class TestRemovingClassDeclaration(TestCase):
             prop3 = 3
 
         '''
-        new_code = remove_class_declaration(old_code, "B")
+        new_code = remove_class_definition(old_code, "B")
         expected_code = '''
         class A():
             prop1 = 1
@@ -101,6 +101,24 @@ class TestAddingParamToClassInstantiation(TestCase):
         old_code = 'new Fruit(age_in_days=5, type="Apple", country="USA")'
         new_code = add_param_to_class_instantiation(old_code, 'Fruit', 'expiration', lambda data: 10 if 'Apple' in data['line'] else 1)
         self.assertEqual(new_code, 'new Fruit(age_in_days=5, type="Apple", country="USA", expiration=10)')
+
+    def test_conditionally_adding_param_to_class_instantiation(self):
+        old_code ='''
+        class Breakfast:
+            origin = new Egg()
+        
+        class Lunch:
+            origin = new Egg()
+        '''
+        new_code = add_param_to_class_instantiation(old_code, 'Egg', 'scrambled', True, lambda data : data['before'].rindex(' Breakfast') > data['before'].rindex('class'))
+        self.assertEqual(new_code, '''
+        class Breakfast:
+            origin = new Egg(scrambled=True)
+        
+        class Lunch:
+            origin = new Egg()
+        ''')
+
 
 
 class TestRemovingClassInstantiationParameter(TestCase):

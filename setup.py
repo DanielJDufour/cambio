@@ -11,7 +11,7 @@ setup(
   packages = ['cambio'],
   package_dir = {'cambio': 'cambio'},
   package_data = {'cambio': ['__init__.py', 'tests/__init__.py', 'tests/test.py']},
-  version = "0.0.2",
+  version = "0.0.3",
   description = 'Change Python Source Code Files',
   long_description = long_description,
   long_description_content_type='text/markdown',

@@ -1,6 +1,16 @@
 # cambio
 Change Python Source Code Files
 
+# methods
+- remove_comments
+- remove_imports
+- declare_variable
+- replace_class
+- replace_variable_declaration
+- remove_class_instantiation_parameter
+- add_param_to_class_instantiation
+- remove_class_definition
+
 # usage
 ## Remove Comments
 ```python
@@ -126,9 +136,9 @@ def get_expiration(instantiation):
 add_param_to_class_instantiation(old_code, "Fruit", "expiration", get_expiration)
 ```
 
-## Remove Class Declaration
+## Remove Class Definition
 ```python
-from cambio import remove_class_declaration
+from cambio import remove_class_definition
 
 old_code = '''
 class OldCar():
@@ -140,11 +150,11 @@ class NewCar():
     b = 2
 '''
 
-new_code = remove_class_declaration(old_code, "OldCar")
+new_code = remove_class_definition(old_code, "OldCar")
 ```
 
 ```bash
-cambio example.py remove-class-declaration 'OldCar'
+cambio example.py remove-class-definition 'OldCar'
 ```
 
 # Testing
