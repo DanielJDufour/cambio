@@ -14,6 +14,11 @@ def get_declaration(variable_name, variable_value):
     elif(isinstance(variable_value, int) or isinstance(variable_value, float)):
         return variable_name + " = " + str(variable_value)
 
+def find_class_declarations(source_code, class_name):
+    pattern = '(?P<indent>[ \t]*)(class ' + class_name + '(.|\n){10,}?)(?<! )(?:\n)(?P=indent)?(?! )'
+    regex = re.compile(pattern, re.MULTILINE)
+    return re.finditer(regex, source_code)
+
 def find_class_instantiations(source_code, variable_name):
     regex = re.compile(variable_name + "\([^\)]*\)", re.MULTILINE)
     return re.finditer(regex, source_code)
@@ -143,6 +148,22 @@ def replace_variable_declaration(source_code, variable_name, new_variable_value)
             new_lines.append(line)
     return "\n".join(new_lines)
 
+def remove_class_declaration(source_code, class_name):
+    offset = 0
+    for class_declaration in find_class_declarations(source_code, class_name):
+        declaration_text = class_declaration.group()
+
+        # get text for line
+        old_start, old_end = class_declaration.span()
+        start = old_start + offset
+        end = old_end + offset
+        before = source_code[:start]
+        after = source_code[end:]
+
+        source_code = before + after
+        offset -= len(declaration_text)
+    return source_code
+
 if __name__ == '__main__':
     cmd, fp, subcommand, param1, param2 = argv
     with open(fp) as f:
@@ -157,5 +178,9 @@ if __name__ == '__main__':
             f.write(source_code)
     elif (subcommand == "declare-variable"):
         source_code = declare_variable(source_code, param1, param2)
+        with open(fp, "w") as f:
+            f.write(source_code)
+    elif (subcommand == "remove-class-declaration"):
+        source_code = remove_class_declaration(source_code, param1)
         with open(fp, "w") as f:
             f.write(source_code)

@@ -2,12 +2,48 @@
 from unittest import main, TestCase
 from cambio import add_param_to_class_instantiation
 from cambio import find_all_named_parameters
+from cambio import remove_class_declaration
 from cambio import remove_class_instantiation_parameter
 from cambio import remove_comments
 from cambio import remove_imports
 from cambio import declare_variable
 from cambio import replace_class
 from cambio import replace_variable_declaration
+
+class TestRemovingClassDeclaration(TestCase):
+    def test_removing_multi_line_class_declaration(self):
+        old_code = '''
+        class A():
+            prop1 = 1
+            prop2 = 2
+            prop3 = 3
+
+        class B():
+            prop1 = 1
+            prop2 = 2
+            prop3 = 3
+
+        class C():
+            prop1 = 1
+            prop2 = 2
+            prop3 = 3
+
+        '''
+        new_code = remove_class_declaration(old_code, "B")
+        expected_code = '''
+        class A():
+            prop1 = 1
+            prop2 = 2
+            prop3 = 3
+
+
+        class C():
+            prop1 = 1
+            prop2 = 2
+            prop3 = 3
+
+        '''
+        self.assertEqual(new_code, expected_code)
 
 class TestRemovingComments(TestCase):
     def test_removing_comments(self):

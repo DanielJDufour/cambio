@@ -69,7 +69,7 @@ print(new_code)
 cambio juicer.py replace-class "Apple" "Orange"
 ```
 
-## Replace Declaration
+## Replace Variable Declaration
 ```python
 from cambio import replace_variable_declaration
 
@@ -124,6 +124,27 @@ def get_expiration(instantiation):
 
 # age cars by one year
 add_param_to_class_instantiation(old_code, "Fruit", "expiration", get_expiration)
+```
+
+## Remove Class Declaration
+```python
+from cambio import remove_class_declaration
+
+old_code = '''
+class OldCar():
+    a = 1
+    b = 2
+
+class NewCar():
+    a = 1
+    b = 2
+'''
+
+new_code = remove_class_declaration(old_code, "OldCar")
+```
+
+```bash
+cambio example.py remove-class-declaration 'OldCar'
 ```
 
 # Testing
