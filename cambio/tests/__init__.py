@@ -92,6 +92,11 @@ class TestFindingsClassInstantiationParameters(TestCase):
         self.assertEqual(str(params), str(['age_in_days=5', ', type="Apple"', ', country="USA"']))
 
 class TestAddingParamToClassInstantiation(TestCase):
+    def test_adding_param_to_class_instantiation_with_one_param(self):
+        old_code = 'new Fruit(country_code="USA")'
+        new_code = add_param_to_class_instantiation(old_code, 'Fruit', 'type', 'Apple')
+        self.assertEqual(new_code, 'new Fruit(country_code="USA", type="Apple")')
+
     def test_adding_param_to_class_instantiation(self):
         old_code = 'new Fruit(age_in_days=5, type="Apple", country="USA")'
         new_code = add_param_to_class_instantiation(old_code, 'Fruit', 'quality', '100')

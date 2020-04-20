@@ -71,7 +71,7 @@ def add_param_to_class_instantiation(source_code, class_name, new_parameter_name
         elif isinstance(new_parameter_value_for_instantiation, str):
             insertion = new_parameter_name + "=" + '"' + new_parameter_value_for_instantiation + '"'
 
-        if old_instantiation_text.count(",") > 0:
+        if old_instantiation_text.count(",") > 0 or len(params) > 0:
             insertion = ", " + insertion
 
         # find end of class instantiation parentheses
